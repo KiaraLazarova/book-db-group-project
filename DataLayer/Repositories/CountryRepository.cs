@@ -6,6 +6,7 @@ namespace DataLayer.Repositories;
 public interface ICountryRepository
 {
     public Country? GetById(int id);
+    public Country? GetByName(string name);
     public IEnumerable<Country> GetAll();
 
     public void Create(Country country);
@@ -28,6 +29,12 @@ public class CountryRepository : ICountryRepository
             .SingleOrDefault(c => c.Id == id);
     }
 
+    public Country? GetByName(string name)
+    {
+        return _context.Countries
+            .SingleOrDefault(c => c.Name == name);
+    }
+    
     public IEnumerable<Country> GetAll()
     {
         return _context.Countries

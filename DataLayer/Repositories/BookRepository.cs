@@ -8,7 +8,7 @@ public interface IBookRepository
     public Book? GetById(int id);
     public IEnumerable<Book> GetAll();
 
-    public void Create(Book book);
+    public Book Create(Book book);
     public void Update(Book book);
     public void Delete(int id);
 }
@@ -36,10 +36,11 @@ public class BookRepository : IBookRepository
             .ToList();
     }
 
-    public void Create(Book book)
+    public Book Create(Book book)
     {
-        _context.Books.Add(book);
+        var entry = _context.Books.Add(book).Entity;
         _context.SaveChanges();
+        return entry;
     }
 
     public void Update(Book book)

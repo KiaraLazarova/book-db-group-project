@@ -6,9 +6,10 @@ namespace DataLayer.Repositories;
 public interface IAuthorRepository
 {
     public Author? GetById(int id);
+    public Author? GetByName(string name);
     public IEnumerable<Author> GetAll();
 
-    public void Create(Author author);
+    public Author Create(Author author);
     public void Update(Author author);
     public void Delete(int id);
 }
@@ -29,6 +30,13 @@ public class AuthorRepository : IAuthorRepository
             .SingleOrDefault(a => a.Id == id);
     }
 
+    public Author? GetByName(string name)
+    {
+        return _context.Authors
+            .Include(a => a.Country)
+            .SingleOrDefault(a => a.FirstName == name);
+    }
+
     public IEnumerable<Author> GetAll()
     {
         return _context.Authors
@@ -36,10 +44,11 @@ public class AuthorRepository : IAuthorRepository
             .ToList();
     }
 
-    public void Create(Author author)
+    public Author Create(Author author)
     {
-        _context.Authors.Add(author);
+        var entity= _context.Authors.Add(author).Entity;
         _context.SaveChanges();
+        return entity;
     }
 
     public void Update(Author author)
